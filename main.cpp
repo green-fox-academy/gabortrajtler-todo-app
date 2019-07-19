@@ -1,6 +1,8 @@
 #include <iostream>
+#include <fstream>
 
 void printMenu();
+void listTasks(std::string taskFilePath);
 
 int main(int argc, char* argv[])
 {
@@ -8,7 +10,17 @@ int main(int argc, char* argv[])
         printMenu();
         return 2;
     }
-    if(std::string(argv[0]) == "-l"){
+
+    std::string taskFilePath = "../tasks";
+    std::string commandArg = std::string(argv[1]);
+
+    if(commandArg == "-l"){
+        listTasks(taskFilePath);
+    } else if (commandArg == "-a") {
+        //TODO
+    } else if (commandArg == "-r") {
+        //TODO
+    } else if (commandArg == "-c") {
         //TODO
     }
 
@@ -16,6 +28,7 @@ int main(int argc, char* argv[])
 }
 
 void printMenu() {
+    std::cout << std::endl;
     std::cout << "Command Line Todo application" << std::endl;
     std::cout << "=============================" << std::endl;
     std::cout << std::endl;
@@ -25,4 +38,20 @@ void printMenu() {
     std::cout << "    -r   Removes a task" << std::endl;
     std::cout << "    -c   Completes a task" << std::endl;
     std::cout << std::endl;
+}
+
+void listTasks(std::string taskFilePath) {
+    std::ifstream taskFile(taskFilePath);
+    std::string line;
+    int lineCount = 1;
+    std::cout << std::endl;
+    if (taskFile.is_open()) {
+        while (getline(taskFile, line)) {
+            std::cout << lineCount << " - " << line << '\n';
+            lineCount++;
+        }
+        taskFile.close();
+    } else {
+        std::cout << "File does not exist!";
+    }
 }
