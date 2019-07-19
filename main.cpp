@@ -9,7 +9,9 @@ bool fileIsEmpty(std::ifstream &pFile);
 
 int tasksFileNotFound();
 
-int addTask(const std::string& taskFilePath, const std::string& taskDescription);
+int taskDescNotProvided();
+
+int addTask(const std::string &taskFilePath, const std::string &taskDescription);
 
 int main(int argc, char *argv[])
 {
@@ -24,7 +26,12 @@ int main(int argc, char *argv[])
     if (commandArg == "-l") {
         return listTasks(taskFilePath);
     } else if (commandArg == "-a") {
-        return addTask(taskFilePath, std::string(argv[2]));
+        if (argc < 3) {
+            return taskDescNotProvided();
+        } else {
+            std::string description = std::string(argv[2]);
+            return addTask(taskFilePath, description);
+        }
     } else if (commandArg == "-r") {
         //TODO
     } else if (commandArg == "-c") {
@@ -33,7 +40,6 @@ int main(int argc, char *argv[])
 
     return 0;
 }
-
 
 
 void printMenu()
@@ -72,7 +78,7 @@ int listTasks(std::string taskFilePath)
     return 0;
 }
 
-int addTask(const std::string& taskFilePath, const std::string& taskDescription)
+int addTask(const std::string &taskFilePath, const std::string &taskDescription)
 {
     std::ofstream taskFile(taskFilePath, std::ios::app);
     std::cout << std::endl;
@@ -94,6 +100,14 @@ bool fileIsEmpty(std::ifstream &pFile)
 
 int tasksFileNotFound()
 {
+    std::cout << std::endl;
     std::cout << "Tasks file does not exist! Exiting program." << std::endl;
     return 1;
+}
+
+int taskDescNotProvided()
+{
+    std::cout << std::endl;
+    std::cout << "Unable to add: no task provided! Exiting program." << std::endl;
+    return 2;
 }
